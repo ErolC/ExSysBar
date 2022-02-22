@@ -6,11 +6,11 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import com.erolc.exbar.systemBar.SystemBarImpl
 import com.erolc.exbar.utils.contentView
-import com.erolc.exbar.utils.getWindowInsetsController
+import com.erolc.exbar.utils.insetsController
 import com.erolc.exbar.utils.navigationBar
 
 class NavigationBarImpl(private val activity: FragmentActivity) : NavigationBar {
-    private val controller by lazy { activity.getWindowInsetsController() }
+    private val controller by lazy { activity.insetsController }
 
     private var systemBarImpl: SystemBarImpl? = null
     private var isHide = false

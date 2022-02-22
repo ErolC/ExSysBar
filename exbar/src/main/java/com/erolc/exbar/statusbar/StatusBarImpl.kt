@@ -11,13 +11,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import com.erolc.exbar.*
 import com.erolc.exbar.systemBar.SystemBarImpl
-import com.erolc.exbar.utils.DisplayCutoutHandler
+import com.erolc.exbar.utils.*
 import com.erolc.exbar.utils.contentView
-import com.erolc.exbar.utils.getWindowInsetsController
 import com.erolc.exbar.utils.statusBar
 
 class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
-    val controller by lazy { activity.getWindowInsetsController() }
+    val controller by lazy { activity.insetsController }
 
     var systemBarImpl: SystemBarImpl? = null
 

@@ -18,20 +18,25 @@ import androidx.fragment.app.FragmentActivity
 
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun Activity.getWindowInsets() = window.decorView.rootWindowInsets
+fun Activity.getRootWindowInsets() = window.decorView.rootWindowInsets
 
-fun Activity.isAttachedToWindow() = window.decorView.isAttachedToWindow
+val Activity.windowInsets @RequiresApi(Build.VERSION_CODES.M)
+get() = WindowInsetsCompat.toWindowInsetsCompat(getRootWindowInsets())
+
+val View.windowInsets @RequiresApi(Build.VERSION_CODES.M)
+get() = WindowInsetsCompat.toWindowInsetsCompat(rootWindowInsets,this)
+
 
 internal val Activity.contentView get() = window.decorView.findViewById<FrameLayout>(Window.ID_ANDROID_CONTENT)
 
-fun Activity.getWindowInsetsController() = WindowCompat.getInsetsController(window, contentView)
-
+val Activity.insetsController get() = WindowCompat.getInsetsController(window, contentView)
 val View.insetsController get() = ViewCompat.getWindowInsetsController(this)
 
 
 fun View.applyWindowInsetsListener(body: ((View, WindowInsetsCompat) -> Unit)? = null) {
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
         body?.invoke(v, insets)
+
         insets
     }
 }

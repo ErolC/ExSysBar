@@ -9,11 +9,8 @@ import java.lang.reflect.Method
 
 /**
  * 是否有刘海屏
- *
- * @return
+ * 处理刘海问题
  */
-
-
 object DisplayCutoutHandler {
     private var hasNotchInScreen: Boolean? = null
     private var hasNotchInScreenBody: ((Boolean?) -> Unit)? = null

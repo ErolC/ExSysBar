@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
-import android.util.Log
 import android.util.Pair
 import android.view.MotionEvent
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.EditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsCompat.Type.InsetsType
 import androidx.fragment.app.Fragment
 import com.erolc.exbar.*
 import com.erolc.exbar.model.TypeMask
@@ -47,27 +45,27 @@ fun View.onSystemBarAnimCallBack(type:TypeMask =TypeMask.IME, callBack: (height:
 }
 
 fun Activity.showIme() {
-    getWindowInsetsController()?.show(ime())
+    insetsController?.show(ime())
 }
 
 fun Fragment.showIme() {
-    activity?.getWindowInsetsController()?.show(ime())
+    activity?.insetsController?.show(ime())
 }
 
 fun Activity.hideIme() {
-    getWindowInsetsController()?.hide(ime())
+    insetsController?.hide(ime())
 }
 
 fun Fragment.hideIme() {
-    activity?.getWindowInsetsController()?.hide(ime())
+    activity?.insetsController?.hide(ime())
 }
 
 /**
  * view排除在SystemBar之外，布局也是正常布局就可以了，加上这一段代码那么该view将永远不会被statusBar/navigationBar所遮盖
  */
 fun View.outEdge() {
-    ExSystemBar.outNavEdgeViews.remove(this)
-    ExSystemBar.outNavEdgeViews.add(this)
+    ExSystemBar.outEdgeViews.remove(this)
+    ExSystemBar.outEdgeViews.add(this)
 }
 
 /**

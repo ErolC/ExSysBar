@@ -22,7 +22,7 @@ object OutBar {
 
         val top = if (systemBarImpl.isStatusVisible) 0 else systemBar.top
 
-        ExSystemBar.outNavEdgeViews.forEach {
+        ExSystemBar.outEdgeViews.forEach {
             it.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 var size = defSize[it.hashCode()]
                 if (size == null) {

@@ -8,13 +8,12 @@ import com.erolc.exbar.systemBar.SystemBar
 import com.erolc.exbar.systemBar.SystemBarFactory
 
 /**
- * StatusBar入口，注意：所属同一个Activity的所有fragment共用一个StatsBar对象。注意切换fragment时StatusBar样式的恢复
+ * SystemBar入口，注意：所属同一个Activity的所有fragment共用一个SystemBar对象。注意切换fragment时StatusBar样式的恢复
  *
  */
 object ExSystemBar {
 
-    internal val outNavEdgeViews = mutableListOf<View>()
-    internal val outStatusEdgeViews = mutableListOf<View>()
+    internal val outEdgeViews = mutableListOf<View>()
 
     @JvmStatic
     fun create(owner: LifecycleOwner): SystemBar {
