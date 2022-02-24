@@ -16,11 +16,10 @@ object OutBar {
     private val defSize = mutableMapOf<Int, ViewSize>()
 
     fun outNavBar(systemBarImpl: SystemBarImpl, systemBar: Insets) {
-        val bottom = if (systemBarImpl.isNavVisible) 0 else systemBar.bottom
-        val left = if (systemBarImpl.isNavVisible) 0 else systemBar.left
-        val right = if (systemBarImpl.isNavVisible) 0 else systemBar.right
-
-        val top = if (systemBarImpl.isStatusVisible) 0 else systemBar.top
+        val bottom = if (systemBarImpl.toNavEdge && systemBarImpl.isNavVisible) systemBar.bottom else 0
+        val left = if (systemBarImpl.toNavEdge && systemBarImpl.isNavVisible) systemBar.left else 0
+        val right = if (systemBarImpl.toNavEdge && systemBarImpl.isNavVisible) systemBar.right else 0
+        val top = if (systemBarImpl.toStatusEdge && systemBarImpl.isStatusVisible) systemBar.top else 0
 
         ExSystemBar.outEdgeViews.forEach {
             it.updateLayoutParams<ViewGroup.MarginLayoutParams> {

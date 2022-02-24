@@ -27,8 +27,6 @@
             android:onClick="hide"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="隐藏"
-            app:layout_constraintTop_toBottomOf="@id/showColor"
-            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -73,9 +71,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
+    <Button
+        android:id="@+id/unImmersive"
+        android:onClick="unImmersive"
+        app:layout_constraintBottom_toTopOf="@id/immersive"
+        android:text="不入侵状态栏"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
             android:onClick="next"
-            app:layout_constraintBottom_toTopOf="@id/immersive"
+            app:layout_constraintBottom_toTopOf="@id/unImmersive"
             android:text="下一页更精彩"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -24,6 +24,9 @@ class SystemBarImpl(
 
     internal var isNavVisible = true
     internal var isStatusVisible = true
+    internal var toStatusEdge = false
+    internal var toNavEdge = false
+
     private var animCallBack: ((Int) -> Unit)? = null
     private var type: TypeMask = TypeMask.IME
 
@@ -32,16 +35,22 @@ class SystemBarImpl(
         navBar.exeBar.setSystemBar(this)
         WindowCompat.setDecorFitsSystemWindows(activity.window, false)
         activity.contentView.applyWindowInsetsListener { view, windowInsetsCompat ->
-            DisplayCutoutHandler.checkHasNotchInScreen(activity)
+
+            val hasNotchInScreen = DisplayCutoutHandler.checkHasNotchInScreen(activity)
+            if (statusBar.exeBar.isAdapterBang != null) {
+                toStatusEdge = !(hasNotchInScreen && statusBar.exeBar.isAdapterBang == false)
+                statusBar.exeBar.isAdapterBang = null
+            }
 
             val navBar = windowInsetsCompat.getInsets(navigationBar())
             val statusBar = windowInsetsCompat.getInsets(statusBar())
             val sysBar = windowInsetsCompat.getInsets(systemBar())
             outNavBar(sysBar)
-            val bottom = if (isNavVisible) navBar.bottom else 0
-            val left = if (isNavVisible) navBar.left else 0
-            val right = if (isNavVisible) navBar.right else 0
-            val top = if (isStatusVisible) statusBar.top else 0
+            val bottom = if (!toNavEdge) navBar.bottom else 0
+            val left = if (!toNavEdge) navBar.left else 0
+            val right = if (!toNavEdge) navBar.right else 0
+            val top = if (!toStatusEdge) statusBar.top else 0
+
 
             view.updatePadding(
                 bottom = bottom,
@@ -80,7 +89,15 @@ class SystemBarImpl(
 
     override fun unFullScreen() {
         statusBar.show()
+        navBar.show()
     }
+
+    override var edgeToEdge: Boolean
+        get() = statusBar.toEdge && navBar.toEdge
+        set(value) {
+            statusBar.toEdge = value
+            navBar.toEdge = value
+        }
 
 
     override fun getStatusBar(): StatusBar {

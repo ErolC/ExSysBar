@@ -50,10 +50,10 @@ class NavigationBarImpl(private val activity: FragmentActivity) : NavigationBar 
         }
 
     override var toEdge: Boolean
-        get() = systemBarImpl?.isNavVisible ?: false
+        get() = systemBarImpl?.toNavEdge ?: false
         set(value) {
-            systemBarImpl?.isNavVisible = value
-            if (!value) {
+            systemBarImpl?.toNavEdge = value
+            if (value) {
                 _background = background
                 background = Color.TRANSPARENT
             } else {
@@ -64,11 +64,16 @@ class NavigationBarImpl(private val activity: FragmentActivity) : NavigationBar 
 
     override fun show() {
         isHide = false
+        systemBarImpl?.isNavVisible = true
+        systemBarImpl?.toNavEdge = false
         controller?.show(navigationBar())
+        toEdge = false
     }
 
     override fun hide() {
         isHide = true
+        systemBarImpl?.isNavVisible = false
+        systemBarImpl?.toNavEdge = true
         controller?.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller?.hide(navigationBar())

@@ -21,7 +21,7 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
     var systemBarImpl: SystemBarImpl? = null
 
     private var isHide = false
-    private var _background:Int = background
+    private var _background: Int = background
 
     private fun Activity.getHeight(): Int {
         val identifier =
@@ -29,19 +29,7 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
         return if (identifier > 0) resources.getDimensionPixelSize(identifier) else 0
     }
 
-    private var hasNotchInScreen: Boolean? = null
-    private var isAdapterBang: Boolean? = null
-
-    init {
-        DisplayCutoutHandler.hasNotchInScreen {
-            hasNotchInScreen = it
-            if (isAdapterBang != null) {
-                hide(isAdapterBang == true)
-                isAdapterBang = null
-            }
-        }
-    }
-
+    internal var isAdapterBang: Boolean? = null
 
     /**
      * 标题栏高度
@@ -64,7 +52,12 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
     private fun isLightColor(color: Int) = ColorUtils.calculateLuminance(color) >= 0.5
 
 
-    override val height: Int get() = if (isHide) { 0 } else { inherentHeight }
+    override val height: Int
+        get() = if (isHide) {
+            0
+        } else {
+            inherentHeight
+        }
 
     override val inherentHeight: Int get() = activity.getHeight()
 
@@ -85,13 +78,13 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
 
 
     override var toEdge: Boolean
-        get() = systemBarImpl?.isStatusVisible ?: false
+        get() = systemBarImpl?.toStatusEdge ?: false
         set(value) {
-            systemBarImpl?.isStatusVisible = value
-            if (!value) {
+            systemBarImpl?.toStatusEdge = value
+            if (value) {
                 _background = background
                 background = Color.TRANSPARENT
-            }else{
+            } else {
                 background = _background
             }
             activity.contentView.requestApplyInsets()
@@ -99,25 +92,19 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
 
     override fun show() {
         isHide = false
+        systemBarImpl?.isStatusVisible = true
+        systemBarImpl?.toStatusEdge = false
         controller?.show(statusBar())
+        toEdge = false
     }
 
     override fun hide(isAdapterBang: Boolean) {
         isHide = true
+        adapterBang(isAdapterBang)
+        systemBarImpl?.isStatusVisible = false
+        this.isAdapterBang = isAdapterBang
         controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
         controller?.hide(statusBar())
-
-        //一个保险机制，当检测是否存在刘海比该方法晚时，需要将isAdapterBang存起来，在检测是否存在刘海完成时再次调用该方法
-        if (hasNotchInScreen == null) {
-            this.isAdapterBang = isAdapterBang
-            return
-        }
-
-        if (hasNotchInScreen == true) {
-            adapterBang(isAdapterBang)
-        } else {
-            adapterBang(true)
-        }
     }
 
 

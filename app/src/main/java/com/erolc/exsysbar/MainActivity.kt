@@ -69,8 +69,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun immersive(view: View) {
-        val invasion = systemBar.toEdge
-        systemBar.toEdge = !invasion
+        systemBar.toEdge = true
+    }
+
+    fun unImmersive(view: View) {
+        systemBar.toEdge = false
     }
 
     fun randomColor(): Int {

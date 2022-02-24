@@ -1,6 +1,7 @@
 package com.erolc.exbar.utils
 
 import android.app.Activity
+import android.opengl.Visibility
 import android.os.Build
 import android.view.DisplayCutout
 import java.lang.Exception
@@ -12,8 +13,7 @@ import java.lang.reflect.Method
  * 处理刘海问题
  */
 object DisplayCutoutHandler {
-    private var hasNotchInScreen: Boolean? = null
-    private var hasNotchInScreenBody: ((Boolean?) -> Unit)? = null
+    private var hasNotchInScreen: Boolean = false
 
     private val Activity.hasNotchInScreen: Boolean
         get() {
@@ -48,18 +48,13 @@ object DisplayCutoutHandler {
             return false
         }
 
-    fun hasNotchInScreen(body: (Boolean?) -> Unit) {
-        hasNotchInScreenBody = body
-        if (hasNotchInScreen != null) {
-            body.invoke(hasNotchInScreen)
-        }
-    }
 
-    fun checkHasNotchInScreen(activity: Activity) {
-        if (hasNotchInScreen == null) {
+    fun checkHasNotchInScreen(activity: Activity): Boolean {
+        if (!hasNotchInScreen) {
             hasNotchInScreen = activity.hasNotchInScreen
-            hasNotchInScreenBody?.invoke(hasNotchInScreen)
+
         }
+        return hasNotchInScreen
     }
 
     /**
