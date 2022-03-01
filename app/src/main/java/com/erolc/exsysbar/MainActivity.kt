@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import com.erolc.exbar.ktx.*
 import com.erolc.exbar.systemBar.navigationBar
@@ -17,22 +18,23 @@ import com.erolc.exbar.systemBar.systemBar
 
 class MainActivity : AppCompatActivity() {
 
-    val systemBar by systemBar {
-        fullScreen()
+    val systemBar by statusBar {
+        toEdge = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val view = findViewById<View>(R.id.hide)
-        val view1 = findViewById<View>(R.id.text)
-
-        view.outEdge()
-        view1.outEdge()
-        view.applyGestureExclusion()
-        view.onSystemBarAnimCallBack() {
-            Log.e("TAG", "onCreate: $it" )
-        }
+        setContentView(R.layout.activity_main1)
+        supportFragmentManager.beginTransaction().add(R.id.root,TestFragment.newInstance()).commit()
+//        val view = findViewById<View>(R.id.hide)
+//        val view1 = findViewById<View>(R.id.text)
+//
+//        view.outEdge()
+//        view1.outEdge()
+//        view.applyGestureExclusion()
+//        view.onSystemBarAnimCallBack() {
+//            Log.e("TAG", "onCreate: $it" )
+//        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -46,33 +48,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hide(view: View) {
-//        systemBar.hide()
+        systemBar.hide()
 
     }
 
     fun show(view: View) {
-//        systemBar.show()
+        systemBar.show()
     }
 
     fun showRedColor(view: View) {
-//        systemBar.background = randomColor()
+        systemBar.background = randomColor()
     }
 
     fun getStatusBarHeight(view: View) {
-//        showToast(systemBar.height)
+        showToast(systemBar.height)
     }
 
     fun switchTextColor(view: View) {
-//        val textColorIsDark = systemBar.colorIsDark
-//        systemBar.colorIsDark = !textColorIsDark
+        val textColorIsDark = systemBar.colorIsDark
+        systemBar.colorIsDark = !textColorIsDark
     }
 
     fun immersive(view: View) {
-//        systemBar.toEdge = true
+        systemBar.toEdge = true
     }
 
     fun unImmersive(view: View) {
-//        systemBar.toEdge = false
+        systemBar.toEdge = false
     }
 
     fun randomColor(): Int {

@@ -16,7 +16,7 @@ class LifeCycleNavBar(
 
     private var _background: Int? = bar.background
     private var contentColorIsDark: Boolean? = bar.colorIsDark
-    private var isHide: Int = 3
+    private var isHide: Int = 2
     private var _invasion = false
 
     private val simpleName = owner.javaClass.simpleName
@@ -88,7 +88,7 @@ class LifeCycleNavBar(
                 }
 
             } else {
-                Log.d(TAG, "restore hide:${isHide == 1}")
+                Log.d(TAG, "nva restore hide:${isHide == 1}")
                 exeBar.hide()
             }
         } else {
