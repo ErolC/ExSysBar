@@ -19,7 +19,7 @@ import com.erolc.exbar.systemBar.systemBar
 class MainActivity : AppCompatActivity() {
 
     val systemBar by statusBar {
-        toEdge = true
+//        toEdge = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

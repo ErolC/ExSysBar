@@ -41,6 +41,13 @@ class LifeCycleNavBar(
         })
     }
 
+    override var colorIsDark: Boolean
+        get() = bar.colorIsDark
+        set(value) {
+            contentColorIsDark = value
+            bar.colorIsDark = value
+        }
+
     override var background: Int
         get() = bar.background
         set(value) {

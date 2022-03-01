@@ -27,6 +27,8 @@ class TestFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return LayoutInflater.from(context).inflate(R.layout.activity_main, container, false)
+        val view =  LayoutInflater.from(context).inflate(R.layout.activity_main, container, false)
+
+        return view
     }
 }

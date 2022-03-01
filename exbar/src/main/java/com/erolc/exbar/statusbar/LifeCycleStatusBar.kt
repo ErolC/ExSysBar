@@ -41,6 +41,13 @@ class LifeCycleStatusBar(
         })
     }
 
+    override var colorIsDark: Boolean
+        get() = bar.colorIsDark
+        set(value) {
+            contentColorIsDark = value
+            bar.colorIsDark = colorIsDark
+        }
+
     override var background: Int
         get() = bar.background
         set(value) {
