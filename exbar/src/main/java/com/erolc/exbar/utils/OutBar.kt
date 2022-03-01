@@ -7,8 +7,6 @@ import androidx.core.util.component2
 import androidx.core.view.updateLayoutParams
 import com.erolc.exbar.ExSystemBar
 import com.erolc.exbar.systemBar.SystemBarImpl
-import com.erolc.exbar.ktx.getPosition
-import com.erolc.exbar.ktx.screenHeight
 import com.erolc.exbar.model.ViewSize
 
 object OutBar {
@@ -20,7 +18,6 @@ object OutBar {
         val left = if (systemBarImpl.toNavEdge && systemBarImpl.isNavVisible) systemBar.left else 0
         val right = if (systemBarImpl.toNavEdge && systemBarImpl.isNavVisible) systemBar.right else 0
         val top = if (systemBarImpl.toStatusEdge && systemBarImpl.isStatusVisible) systemBar.top else 0
-
         ExSystemBar.outEdgeViews.forEach {
             it.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 var size = defSize[it.hashCode()]

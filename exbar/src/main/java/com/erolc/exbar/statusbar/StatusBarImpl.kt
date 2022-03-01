@@ -80,6 +80,9 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
     override var toEdge: Boolean
         get() = systemBarImpl?.toStatusEdge ?: false
         set(value) {
+            if (value == systemBarImpl?.toStatusEdge) {
+                return
+            }
             systemBarImpl?.toStatusEdge = value
             if (value) {
                 _background = background
@@ -93,7 +96,6 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
     override fun show() {
         isHide = false
         systemBarImpl?.isStatusVisible = true
-        systemBarImpl?.toStatusEdge = false
         controller?.show(statusBar())
         toEdge = false
     }
@@ -103,7 +105,8 @@ class StatusBarImpl(private val activity: FragmentActivity) : StatusBar {
         adapterBang(isAdapterBang)
         systemBarImpl?.isStatusVisible = false
         this.isAdapterBang = isAdapterBang
-        controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+        _background = background
+        controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller?.hide(statusBar())
     }
 

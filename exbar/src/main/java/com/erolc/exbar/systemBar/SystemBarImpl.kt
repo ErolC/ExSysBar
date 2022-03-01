@@ -2,11 +2,11 @@ package com.erolc.exbar.systemBar
 
 import android.annotation.SuppressLint
 import androidx.core.graphics.Insets
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsAnimationCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.core.view.*
 import androidx.fragment.app.FragmentActivity
+import com.erolc.exbar.ktx.ViewInsetsAnimCall
+import com.erolc.exbar.ktx.applyWindowInsetsListener
+import com.erolc.exbar.ktx.onWindowInsetsAnimationCallback
 import com.erolc.exbar.model.TypeMask
 import com.erolc.exbar.navigationbar.LifeCycleNavBar
 import com.erolc.exbar.navigationbar.NavigationBar
@@ -29,6 +29,8 @@ class SystemBarImpl(
 
     private var animCallBack: ((Int) -> Unit)? = null
     private var type: TypeMask = TypeMask.IME
+    val controller by lazy { activity.insetsController }
+
 
     init {
         statusBar.exeBar.setSystemBar(this)
@@ -82,7 +84,7 @@ class SystemBarImpl(
     }
 
 
-    override fun fullScreen(isAdapterBang: Boolean, isSticky: Boolean) {
+    override fun fullScreen(isAdapterBang: Boolean) {
         statusBar.hide(isAdapterBang)
         navBar.hide()
     }

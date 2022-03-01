@@ -52,6 +52,9 @@ class NavigationBarImpl(private val activity: FragmentActivity) : NavigationBar 
     override var toEdge: Boolean
         get() = systemBarImpl?.toNavEdge ?: false
         set(value) {
+            if (systemBarImpl?.toNavEdge == value) {
+                return
+            }
             systemBarImpl?.toNavEdge = value
             if (value) {
                 _background = background
@@ -65,7 +68,6 @@ class NavigationBarImpl(private val activity: FragmentActivity) : NavigationBar 
     override fun show() {
         isHide = false
         systemBarImpl?.isNavVisible = true
-        systemBarImpl?.toNavEdge = false
         controller?.show(navigationBar())
         toEdge = false
     }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
+import android.os.Build
 import android.util.Pair
 import android.view.MotionEvent
 import android.view.View
@@ -22,12 +23,43 @@ fun EditText.showIme() {
     insetsController?.show(ime())
 }
 
-fun EditText.hideIme() {
+fun View.hideIme() {
     insetsController?.hide(ime())
     clearFocus()
 }
 
-fun View.onSystemBarAnimCallBack(type:TypeMask =TypeMask.IME, callBack: (height: Int) -> Unit) {
+fun Activity.showIme() {
+    insetsController?.show(ime())
+}
+
+fun Fragment.showIme() {
+    insetsController?.show(ime())
+}
+
+fun Activity.hideIme() {
+    insetsController?.hide(ime())
+}
+
+fun Fragment.hideIme() {
+    insetsController?.hide(ime())
+}
+
+
+/**
+ * view排除在SystemBar之外，布局也是正常布局就可以了，加上这一段代码那么该view将永远不会被statusBar/navigationBar所遮盖
+ */
+fun View.outEdge() {
+    ExSystemBar.outEdgeViews.remove(this)
+    ExSystemBar.outEdgeViews.add(this)
+}
+
+/**
+ * 系统栏动画回调。
+ */
+fun View.onSystemBarAnimCallBack(
+    type: TypeMask = TypeMask.IME,
+    callBack: View.(height: Int) -> Unit
+) {
     onWindowInsetsAnimationCallback(object : ViewInsetsAnimCall(DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
         override fun onProgress(
             insets: WindowInsetsCompat,
@@ -36,7 +68,7 @@ fun View.onSystemBarAnimCallBack(type:TypeMask =TypeMask.IME, callBack: (height:
             runningAnimations.forEach {
                 if (it.typeMask == type.type) {
                     val bottom = insets.getInsets(it.typeMask).bottom
-                    callBack.invoke(bottom)
+                    callBack.invoke(getView(), bottom)
                 }
             }
             return insets
@@ -44,28 +76,23 @@ fun View.onSystemBarAnimCallBack(type:TypeMask =TypeMask.IME, callBack: (height:
     })
 }
 
-fun Activity.showIme() {
-    insetsController?.show(ime())
-}
+private fun View.updateGestureExclusion() {
+    val gestureExclusionRects = mutableListOf<Rect>()
+    // Skip this call if we're not running on Android 10+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val rootWindowInsets = rootWindowInsets ?: return
 
-fun Fragment.showIme() {
-    activity?.insetsController?.show(ime())
-}
+        val gestureInsets = WindowInsetsCompat.toWindowInsetsCompat(rootWindowInsets, this)
+            .getInsets(WindowInsetsCompat.Type.systemGestures())
 
-fun Activity.hideIme() {
-    insetsController?.hide(ime())
-}
+        gestureExclusionRects.clear()
+        // Add an exclusion rect for the left gesture edge
+        gestureExclusionRects += Rect(0, 0, gestureInsets.left, height)
+        // Add an exclusion rect for the right gesture edge
+        gestureExclusionRects += Rect(width - gestureInsets.right, 0, width, height)
 
-fun Fragment.hideIme() {
-    activity?.insetsController?.hide(ime())
-}
-
-/**
- * view排除在SystemBar之外，布局也是正常布局就可以了，加上这一段代码那么该view将永远不会被statusBar/navigationBar所遮盖
- */
-fun View.outEdge() {
-    ExSystemBar.outEdgeViews.remove(this)
-    ExSystemBar.outEdgeViews.add(this)
+        ViewCompat.setSystemGestureExclusionRects(this, gestureExclusionRects)
+    }
 }
 
 /**
@@ -106,13 +133,25 @@ fun Activity.hideImeWithOutViews(
     KeyBoardHandler.dispatchTouchEvent(this, superDispatchTouchEvent, noHideKeyboardViews, ev)
 
 
-internal fun View.getPosition(): Pair<Int, Int> {
-    val position = IntArray(2)
-    getLocationInWindow(position)
-    return Pair(position[0], position[1])
+fun View.applyWindowInsetsListener(body: ((View, WindowInsetsCompat) -> Unit)? = null) {
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        body?.invoke(v, insets)
+        insets
+    }
 }
 
-internal val screenHeight: Int get() = Resources.getSystem().displayMetrics.heightPixels
+
+fun View.onWindowInsetsAnimationCallback(callBack: ViewInsetsAnimCall) {
+    callBack.view = this
+    ViewCompat.setWindowInsetsAnimationCallback(this, callBack)
+}
+
+
+abstract class ViewInsetsAnimCall(@DispatchMode dispatchMode: Int) :
+    WindowInsetsAnimationCompat.Callback(dispatchMode) {
+    internal var view: View? = null
+    fun getView() = view!!
+}
 
 val Context.statusBarHeight: Int
     get() {

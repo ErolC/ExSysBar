@@ -9,18 +9,16 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
-import com.erolc.exbar.ktx.hideImeWithOutViews
-import com.erolc.exbar.ktx.onSystemBarAnimCallBack
-import com.erolc.exbar.ktx.outEdge
-import com.erolc.exbar.ktx.showIme
+import com.erolc.exbar.ktx.*
 import com.erolc.exbar.systemBar.navigationBar
 import com.erolc.exbar.systemBar.statusBar
+import com.erolc.exbar.systemBar.systemBar
 
 
 class MainActivity : AppCompatActivity() {
 
-    val systemBar by statusBar {
-
+    val systemBar by systemBar {
+        fullScreen()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         view.outEdge()
         view1.outEdge()
+        view.applyGestureExclusion()
         view.onSystemBarAnimCallBack() {
             Log.e("TAG", "onCreate: $it" )
         }
@@ -47,33 +46,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hide(view: View) {
-        systemBar.hide()
+//        systemBar.hide()
 
     }
 
     fun show(view: View) {
-        systemBar.show()
+//        systemBar.show()
     }
 
     fun showRedColor(view: View) {
-        systemBar.background = randomColor()
+//        systemBar.background = randomColor()
     }
 
     fun getStatusBarHeight(view: View) {
-        showToast(systemBar.height)
+//        showToast(systemBar.height)
     }
 
     fun switchTextColor(view: View) {
-        val textColorIsDark = systemBar.colorIsDark
-        systemBar.colorIsDark = !textColorIsDark
+//        val textColorIsDark = systemBar.colorIsDark
+//        systemBar.colorIsDark = !textColorIsDark
     }
 
     fun immersive(view: View) {
-        systemBar.toEdge = true
+//        systemBar.toEdge = true
     }
 
     fun unImmersive(view: View) {
-        systemBar.toEdge = false
+//        systemBar.toEdge = false
     }
 
     fun randomColor(): Int {

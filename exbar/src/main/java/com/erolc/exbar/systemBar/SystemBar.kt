@@ -5,12 +5,13 @@ import com.erolc.exbar.statusbar.StatusBar
 import com.erolc.exbar.model.TypeMask
 
 interface SystemBar {
+
+    //     * @param isSticky 是否是粘性,粘性模式下，应用将占用手势区域，将无法直接使用左右滑动进行后退，需要先从下方向上滑动，呼出底部导航栏之后才可触发手势区域
     /**
      * 全屏
      * @param isAdapterBang 是否适配刘海
-     * @param isSticky 是否是粘性,粘性模式下，应用将占用手势区域，将无法直接使用左右滑动进行后退，需要先从下方向上滑动，呼出底部导航栏之后才可触发手势区域
      */
-    fun fullScreen(isAdapterBang: Boolean = true, isSticky: Boolean = true)
+    fun fullScreen(isAdapterBang: Boolean = true)
 
     /**
      * 解除全屏
